@@ -25,3 +25,25 @@ A minimal desktop visualizer built with PyQt5 — featuring glowing bars, color 
 ```bash
 pip install -r requirements.txt
 python main.py
+```
+
+## 🤝 Contributing
+
+This is a personal project, but you're welcome to explore, fork, or suggest improvements.
+
+If you'd like to contribute:
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature-name`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to your branch (`git push origin feature-name`)
+5. Open a pull request
+
+Bug reports, feature ideas, and feedback are always appreciated!
+
+
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+
