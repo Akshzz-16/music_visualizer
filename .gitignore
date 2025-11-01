@@ -1,0 +1,22 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+myEnv310/
+env/
+venv/
+
+# PyInstaller build folders
+build/
+dist/
+*.spec
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Installer output
+*.exe
