@@ -19,13 +19,12 @@ A minimal desktop visualizer built with PyQt5 — featuring glowing bars, color 
 - Rounded bars with animated glow
 - Color cycling synced to audio
 - Tray icon with show/hide and quit options
-- Displays currently playing media app
 - Lightweight and always-on-top
 
 
 ## 👤 How to Install 
 
-- An Installer will be provided 
+- An Installer is provided above
 
 
 ## 🚀 How to Run (Developer Mode)
