@@ -58,15 +58,19 @@ class VisualizerWindow(QWidget):
         self.close_btn.clicked.connect(self.hide)
 
         # Tray icon
-        self.tray_icon = QSystemTrayIcon(QIcon("icon.png"), self)
-        tray_menu = QMenu()
-        restore_action = QAction("Show Visualizer", self)
+        self.tray_icon = QSystemTrayIcon(QIcon("icon.ico"), self)
+        self.tray_icon.setToolTip("Music Visualizer")
+
+        menu = QMenu()
+        restore_action = QAction("Show", self)
         restore_action.triggered.connect(self.show)
+        menu.addAction(restore_action)
+
         quit_action = QAction("Quit", self)
         quit_action.triggered.connect(QApplication.quit)
-        tray_menu.addAction(restore_action)
-        tray_menu.addAction(quit_action)
-        self.tray_icon.setContextMenu(tray_menu)
+        menu.addAction(quit_action)
+
+        self.tray_icon.setContextMenu(menu)
         self.tray_icon.show()
 
     def poll_audio(self):
@@ -127,6 +131,12 @@ class VisualizerWindow(QWidget):
     def closeEvent(self, event):
         event.ignore()
         self.hide()
+        self.tray_icon.showMessage(
+            "Music Visualizer",
+            "App is still running in the tray.",
+            QSystemTrayIcon.Information,
+            2000
+        )
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -6,7 +6,7 @@ A minimal desktop visualizer built with PyQt5 — featuring glowing bars, color 
 
 <p align="center">
   <a href="https://github.com/Akshzz-16/music_visualizer/releases/latest">
-    <img src="https://img.shields.io/badge/Download%20Installer-v1.0-blue?style=for-the-badge&logo=github" alt="Download Installer" style="border-radius: 8px;">
+    <img src="https://img.shields.io/badge/Download%20Installer-v1.1-blue?style=for-the-badge&logo=github" alt="Download Installer" style="border-radius: 8px;">
   </a>
 </p>
 
