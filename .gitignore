@@ -12,6 +12,7 @@ venv/
 # PyInstaller build folders
 build/
 dist/
+installer/
 *.spec
 
 # OS files
