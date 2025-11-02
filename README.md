@@ -1,6 +1,6 @@
 # 🎵 Music Visualizer
 
-A minimal desktop visualizer built with PyQt5 — featuring glowing bars, color cycling, and tray icon control.
+A minimal desktop visualizer which stays on top of all the screens, can be minimised into tray icons,visualises the sound that plays through speaker and bluetooth headphones, featuring glowing bars, color cycling, and tray icon control.
 
 ## 📥 Download
 
