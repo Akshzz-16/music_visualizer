@@ -1,12 +1,12 @@
 # 🎵 Music Visualizer
 
-A minimal desktop visualizer which stays on top of all the screens, can be minimised into tray icons,visualises the sound that plays through speaker and bluetooth headphones, featuring glowing bars, color cycling, and tray icon control.
+A minimal desktop visualizer which stays on top of all the screens, can be minimised into tray icons,visualises the sound that plays through speaker and bluetooth headphones, featuring glowing bars, mode and color cycling, and tray icon control.
 
 ## 📥 Download
 
 <p align="center">
   <a href="https://github.com/Akshzz-16/music_visualizer/releases/latest">
-    <img src="https://img.shields.io/badge/Download%20Installer-v1.2-blue?style=for-the-badge&logo=github" alt="Download Installer" style="border-radius: 8px;">
+    <img src="https://img.shields.io/badge/Download%20Installer-v2.0-blue?style=for-the-badge&logo=github" alt="Download Installer" style="border-radius: 10px;">
   </a>
 </p>
 
@@ -16,6 +16,7 @@ A minimal desktop visualizer which stays on top of all the screens, can be minim
 
 ## ✨ Features
 
+- Cycle through Modes (Bottom bar, Center Bar, Waveform)
 - Rounded bars with animated glow
 - Color cycling synced to audio
 - Tray icon with show/hide and quit options
