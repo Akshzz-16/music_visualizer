@@ -21,7 +21,7 @@ class VisualizerWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Visualizer")
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setFixedSize(300, 120)
 
