@@ -112,9 +112,9 @@ class VisualizerWindow(QWidget):
                 target = volume * randomness
                 current = self.bar_values[i]
                 if target > current:
-                    self.bar_values[i] = 0.1 * current + 0.4 * target
+                    self.bar_values[i] = 0.1 * current + 0.2 * target
                 else:
-                    self.bar_values[i] = 0.1 * current + 0.3 * target
+                    self.bar_values[i] = 0.1 * current + 0.2 * target
 
         except Exception:
             try:
