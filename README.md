@@ -16,7 +16,7 @@ A minimal desktop visualizer which stays on top of all the screens, can be minim
 
 ## ✨ Features
 
-- Cycle through Modes (Bottom bar, Center Bar, Waveform)
+- Cycle through Modes (Bottom bar, Center Bar, Waveform) (press TAB)
 - Rounded bars with animated glow
 - Color cycling synced to audio
 - Tray icon with show/hide and quit options
