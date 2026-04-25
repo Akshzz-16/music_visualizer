@@ -33,7 +33,7 @@ jobs:
           pip install pyinstaller
 
       - name: Build app executable
-        run: pyinstaller main.spec
+        run: python -m PyInstaller main.spec
 
       - name: Resolve release version
         id: version
