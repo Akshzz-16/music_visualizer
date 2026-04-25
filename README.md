@@ -6,7 +6,7 @@ A minimal desktop visualizer which stays on top of all the screens, can be minim
 
 <p align="center">
   <a href="https://github.com/Akshzz-16/music_visualizer/releases/latest">
-    <img src="https://img.shields.io/badge/Download%20Installer-latest-blue?style=for-the-badge&logo=github" alt="Download Installer" style="border-radius: 10px;">
+    <img src="https://img.shields.io/badge/Download%20Installer-v2.0-blue?style=for-the-badge&logo=github" alt="Download Installer" style="border-radius: 10px;">
   </a>
 </p>
 
@@ -26,21 +26,6 @@ A minimal desktop visualizer which stays on top of all the screens, can be minim
 ## 👤 How to Install 
 
 - An Installer is provided above
-
-## 📦 Publish a Release
-
-Push a tag like `v2.1` to GitHub and Actions will:
-
-- build the Python executable with PyInstaller
-- build `MusicVisualizerSetup.exe` with Inno Setup
-- upload the installer to GitHub Releases
-
-Commands:
-
-```bash
-git tag v2.1
-git push origin v2.1
-```
 
 
 ## 🚀 How to Run (Developer Mode)
