@@ -2,3 +2,4 @@ PyQt5
 numpy
 soundcard
 pycaw
+winsdk==1.0.0b10

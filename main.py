@@ -1,6 +1,7 @@
 import ctypes
 ctypes.windll.ole32.CoInitializeEx(0, 2)  # COM-safe initialization
 
+import asyncio
 import sys
 import math
 import numpy as np
@@ -9,7 +10,12 @@ import warnings
 import colorsys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QSystemTrayIcon, QMenu, QAction
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QColor, QPainter, QFont, QIcon
+from PyQt5.QtGui import QColor, QPainter, QFont, QIcon, QFontMetrics
+
+try:
+    from winsdk.windows.media.control import GlobalSystemMediaTransportControlsSessionManager
+except ImportError:
+    GlobalSystemMediaTransportControlsSessionManager = None
 
 warnings.filterwarnings("ignore", category=sc.SoundcardRuntimeWarning)
 
@@ -24,6 +30,11 @@ class VisualizerWindow(QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setFixedSize(300, 120)
+        self.drag_position = None
+        self.drag_active = False
+        self.hovered = False
+        self.setCursor(Qt.PointingHandCursor)
+        self.setMouseTracking(True)
 
         screen_geometry = QApplication.primaryScreen().geometry()
         x = max(0, screen_geometry.width() - self.width() - 10)
@@ -35,6 +46,10 @@ class VisualizerWindow(QWidget):
         self.hue = 0.0
         self.glow_phase = 0.0
         self.glow_alpha = 80
+        self.idle_phase = 0.0
+        self.waveform = []
+        self.current_track = ""
+        self.media_available = GlobalSystemMediaTransportControlsSessionManager is not None
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update)
@@ -51,10 +66,19 @@ class VisualizerWindow(QWidget):
         self.audio_timer.timeout.connect(self.poll_audio)
         self.audio_timer.start(100)
 
+        self.media_timer = QTimer()
+        self.media_timer.timeout.connect(self.refresh_media_info)
+        self.media_timer.start(1500)
+
         # Close button
         self.close_btn = QPushButton("×", self)
-        self.close_btn.setGeometry(self.width() - 25, 5, 20, 20)
-        self.close_btn.setStyleSheet("color: white; background: transparent; border: none; font-size: 16px;")
+        self.close_btn.setGeometry(self.width() - 42, 8, 34, 34)
+        self.close_btn.setCursor(Qt.PointingHandCursor)
+        self.close_btn.setStyleSheet(
+            "QPushButton { color: white; background: rgba(255, 255, 255, 18); border: none; "
+            "border-radius: 17px; font-size: 20px; font-weight: bold; }"
+            "QPushButton:hover { background: rgba(255, 255, 255, 36); }"
+        )
         self.close_btn.clicked.connect(self.hide)
 
         # Tray icon
@@ -82,6 +106,30 @@ class VisualizerWindow(QWidget):
         self.label_opacity = 0.0
         self.label_timer = QTimer(self)
         self.label_timer.timeout.connect(self.fade_label)
+
+    def refresh_media_info(self):
+        if not self.media_available:
+            self.current_track = ""
+            return
+
+        try:
+            self.current_track = asyncio.run(self.fetch_media_info())
+        except Exception:
+            self.current_track = ""
+
+    async def fetch_media_info(self):
+        session_manager = await GlobalSystemMediaTransportControlsSessionManager.request_async()
+        current_session = session_manager.get_current_session()
+        if current_session is None:
+            return ""
+
+        media_properties = await current_session.try_get_media_properties_async()
+        title = (media_properties.title or "").strip()
+        artist = (media_properties.artist or "").strip()
+
+        if title and artist:
+            return f"{title} - {artist}"
+        return title or artist
 
     def poll_audio(self):
         try:
@@ -128,7 +176,9 @@ class VisualizerWindow(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
         center_y = self.height() // 2
-        max_bar_height = self.height() // 2 - 10
+        top_padding = 38 if self.hovered and self.current_track else 14
+        bottom_padding = 16
+        max_bar_height = max(24, self.height() - top_padding - bottom_padding)
         min_bar_height = 4
         bar_spacing = self.width() / (self.num_bars + 1)
 
@@ -136,10 +186,28 @@ class VisualizerWindow(QWidget):
         color = QColor(r, g, b, 200)
         glow = QColor(r, g, b, self.glow_alpha)
 
+        if self.hovered and self.current_track:
+            font = QFont("Segoe UI", 10)
+            painter.setFont(font)
+            metrics = QFontMetrics(font)
+            track_text = metrics.elidedText(self.current_track, Qt.ElideRight, self.width() - 72)
+            text_rect = metrics.boundingRect(track_text)
+            pill_width = text_rect.width() + 22
+            pill_height = 24
+            pill_x = max(12, (self.width() - pill_width) // 2)
+            pill_y = 8
+
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(QColor(0, 0, 0, 120))
+            painter.drawRoundedRect(pill_x, pill_y, pill_width, pill_height, 13, 13)
+
+            painter.setPen(QColor(255, 255, 255, 230))
+            painter.drawText(pill_x + 11, pill_y + 16, track_text)
+
         # Waveform trail
         if self.show_waveform and len(self.waveform) > 0:
             painter.setPen(QColor(255, 255, 255, 60))
-            scale = self.height() // 4
+            scale = max_bar_height // 2
             step = max(1, len(self.waveform) // self.width())
 
             points = []
@@ -162,7 +230,7 @@ class VisualizerWindow(QWidget):
                 if self.bar_origin == "center":
                     y = center_y - bar_height // 2
                 else:  # bottom
-                    y = self.height() - bar_height - 55
+                    y = self.height() - bar_height - bottom_padding
 
                 painter.setPen(Qt.NoPen)
                 painter.setBrush(glow)
@@ -182,13 +250,35 @@ class VisualizerWindow(QWidget):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
+            if self.childAt(event.pos()) == self.close_btn:
+                return
             self.drag_position = event.globalPos() - self.frameGeometry().topLeft()
+            self.drag_active = True
+            self.setCursor(Qt.ClosedHandCursor)
             event.accept()
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
+        if self.drag_active and event.buttons() == Qt.LeftButton and self.drag_position is not None:
             self.move(event.globalPos() - self.drag_position)
             event.accept()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drag_active = False
+            self.setCursor(Qt.PointingHandCursor)
+            event.accept()
+
+    def enterEvent(self, event):
+        self.hovered = True
+        self.update()
+        super().enterEvent(event)
+
+    def leaveEvent(self, event):
+        self.hovered = False
+        self.drag_active = False
+        self.setCursor(Qt.PointingHandCursor)
+        self.update()
+        super().leaveEvent(event)
 
     def closeEvent(self, event):
         event.ignore()
