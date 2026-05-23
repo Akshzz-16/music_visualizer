@@ -6,7 +6,7 @@ A minimal desktop visualizer which stays on top of all the screens, can be minim
 
 <p align="center">
   <a href="https://github.com/Akshzz-16/music_visualizer/releases/latest">
-    <img src="https://img.shields.io/badge/Download%20Installer-v2.0-blue?style=for-the-badge&logo=github" alt="Download Installer" style="border-radius: 10px;">
+    <img src="https://img.shields.io/badge/Download%20Installer-v2.1-blue?style=for-the-badge&logo=github" alt="Download Installer" style="border-radius: 10px;">
   </a>
 </p>
 
